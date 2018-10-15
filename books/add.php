@@ -74,6 +74,9 @@
 
             $result = mysqli_query($dbc, $sql); //needs database connection and the sql query
             if ($result && mysqli_affected_rows($dbc) > 0) { //if there is something in the result. Make sure this says my sqli instead of my sql - dont forget the i
+
+                $lastID = $dbc->insert_id; //whatever the id was that was just inserted
+
                 $destination = "images/uploads";
                 if(! is_dir($destination) ){
                     mkdir("images/uploads/", 0777, true);
@@ -94,7 +97,8 @@
                 });
                 $thumbnailImage->save($thumbDestination."/".$newFileName, 100);
 
-                header("Location: ./books/book.php");
+
+                header("Location: ./books/book.php?id=$lastID");
             } else {
                 die("Something went wrong, can't add the entry into the database");
             }

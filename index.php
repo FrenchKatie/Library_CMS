@@ -1,5 +1,14 @@
 <?php
     require('templates/header.php');
+    $sql = "SELECT * FROM `books` ORDER BY ID DESC LIMIT 1";
+    // $result = mysqli_query($dbc, $sql);
+
+    $result = mysqli_query($dbc, $sql);
+    if ($result && mysqli_affected_rows($dbc) > 0) {
+        $latestBook = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    }else {
+        die("ERROR! Something went wrong, cannot get the latest");
+    }
  ?>
 
  <div class="container">
@@ -17,13 +26,13 @@
                 <div class="card-body d-flex flex-column align-items-start">
                     <strong class="d-inline-block mb-2 text-primary">Books</strong>
                     <h3 class="mb-0">
-                        <a class="text-dark" href="#">Latest Book Title</a>
+                        <a class="text-dark" href="#"><?= $latestBook["book_name"]; ?></a>
                     </h3>
-                    <div class="mb-1 text-muted">Nov 12</div>
-                    <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                    <div class="mb-1 text-muted"><?= $latestBook["author"]; ?></div>
+                    <p class="card-text mb-auto"><?= $latestBook["description"]; ?></p>
                     <a href="./books/single.php">Continue reading</a>
                 </div>
-                <img class="card-img-right flex-auto d-none d-lg-block" data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
+                <img class="card-img-right flex-auto d-none d-lg-block" src="./books/images/uploads/<?= $latestBook["image_name"]; ?>" alt="Card image cap">
             </div>
         </div>
         <div class="col-md-6">

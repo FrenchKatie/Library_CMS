@@ -4,10 +4,13 @@
 
     $sql = "SELECT * FROM `books` WHERE id = $id"; //select query which will filter out the books
     $result = mysqli_query($dbc, $sql);
-    if ($result && mysqli_affected_rows($dbc) > 0) { //an empty result will still count so am returning one with content
+    if ($result && mysqli_affected_rows($dbc) > 0) { //an empty result will still count - so if there are books more than 0
         $singleBook = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    } elseif ($result && mysqli_affected_rows($dbc) == 0) { //if there are books but book id cant be found
+        die("ERROR! 404");
+        // header("Location: ../errors/404.php")
     } else {
-        die("ERROR! Cannot get the data requested");
+        die("ERROR! Cannot get the data requested"); //if there are no books
     }
 
  ?>
