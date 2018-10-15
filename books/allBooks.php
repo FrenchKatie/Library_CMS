@@ -32,8 +32,8 @@
                             <p class="card-text"><?= $singleBook['book_name'] ?></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a href="book.php" class="btn btn-sm btn-outline-info">View</a>
-                                    <a href="update.php" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="books/book.php?id=<?= $singleBook['id']; ?>" class="btn btn-sm btn-outline-info">View</a>
+                                    <a href="books/update.php" class="btn btn-sm btn-outline-secondary">Edit</a>
                                 </div>
                             </div>
                         </div>
