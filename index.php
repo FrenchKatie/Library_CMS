@@ -1,14 +1,13 @@
 <?php
     require('templates/header.php');
+
     $sql = "SELECT * FROM `books` ORDER BY ID DESC LIMIT 1";
-    // $result = mysqli_query($dbc, $sql);
 
     $result = mysqli_query($dbc, $sql);
-    if ($result && mysqli_affected_rows($dbc) > 0) {
+    if($result && mysqli_affected_rows($dbc) > 0){
         $latestBook = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    }else {
-        die("ERROR! Something went wrong, cannot get the latest");
     }
+
  ?>
 
  <div class="container">
@@ -21,20 +20,22 @@
     </div>
 
     <div class="row mb-2">
-        <div class="col-md-6">
-            <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-                <div class="card-body d-flex flex-column align-items-start">
-                    <strong class="d-inline-block mb-2 text-primary">Books</strong>
-                    <h3 class="mb-0">
-                        <a class="text-dark" href="#"><?= $latestBook["book_name"]; ?></a>
-                    </h3>
-                    <div class="mb-1 text-muted"><?= $latestBook["author"]; ?></div>
-                    <p class="card-text mb-auto"><?= $latestBook["description"]; ?></p>
-                    <a href="./books/single.php">Continue reading</a>
+        <?php if(isset($latestBook)): ?>
+            <div class="col-md-6">
+                <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="d-inline-block mb-2 text-primary">Books</strong>
+                        <h3 class="mb-0">
+                            <a class="text-dark" href="./books/book.php?id=<?= $latestBook['id']; ?>"><?= $latestBook['book_name'];  ?></a>
+                        </h3>
+                        <div class="mb-1 text-muted">Nov 12</div>
+                        <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                        <a href="./books/book.php?id=<?= $latestBook['id']; ?>">Continue reading</a>
+                    </div>
+                    <img class="card-img-right flex-auto d-none d-lg-block" src="./images/uploads/thumbnails/<?= $latestBook['image_name']; ?>" alt="Card image cap">
                 </div>
-                <img class="card-img-right flex-auto d-none d-lg-block" src="./books/images/uploads/<?= $latestBook["image_name"]; ?>" alt="Card image cap">
             </div>
-        </div>
+        <?php endif; ?>
         <div class="col-md-6">
             <div class="card flex-md-row mb-4 shadow-sm h-md-250">
                 <div class="card-body d-flex flex-column align-items-start">

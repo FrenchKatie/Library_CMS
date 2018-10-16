@@ -1,6 +1,6 @@
 <?php
     require '../templates/header.php';
-    require '../vendor/autoload.php';
+
     // import the Intervention Image Manager Class
     use Intervention\Image\ImageManager;
 
@@ -55,8 +55,6 @@
 
         if(empty($errors)){
 
-            //database:
-            //needs two things: the db conneciton and then what do we want to escape?
             $title = mysqli_real_escape_string($dbc, $title);
             $author = mysqli_real_escape_string($dbc, $author);
             $description = mysqli_real_escape_string($dbc, $description);
@@ -64,49 +62,53 @@
             $newFileName = uniqid() .".".  $fileExt;
             $filename = mysqli_real_escape_string($dbc, $newFileName);
 
-            //creating some sql:
-            //copy the line from the sql query that phpmyadmin gives you
-            //dont include id as it auto increments - remove the value for it too
-            //the insert into must match the order of the value
             $sql = "INSERT INTO `books`(`book_name`, `author`, `description`, `image_name`) VALUES ('$title','$author','$description','$filename')";
 
             // die($sql);
 
-            $result = mysqli_query($dbc, $sql); //needs database connection and the sql query
-            if ($result && mysqli_affected_rows($dbc) > 0) { //if there is something in the result. Make sure this says my sqli instead of my sql - dont forget the i
+            $result = mysqli_query($dbc, $sql);
+            if( $result && mysqli_affected_rows($dbc) > 0 ){
+                $lastID = $dbc->insert_id;
 
-                $lastID = $dbc->insert_id; //whatever the id was that was just inserted
-
-                $destination = "images/uploads";
+                $destination = "../images/uploads";
                 if(! is_dir($destination) ){
-                    mkdir("images/uploads/", 0777, true);
+                    mkdir("../images/uploads/", 0777, true);
                 }
-
                 // move_uploaded_file($fileTmp, $destination."/".$newFileName);
                 $manager = new ImageManager();
                 $mainImage = $manager->make($fileTmp);
                 $mainImage->save($destination."/".$newFileName, 100);
+
                 $thumbnailImage = $manager->make($fileTmp);
-                $thumbDestination = "images/uploads/thumbnails";
+                $thumbDestination = "../images/uploads/thumbnails";
                 if(! is_dir($thumbDestination)){
-                    mkdir("images/uploads/thumbnails/", 0777, true);
+                    mkdir("../images/uploads/thumbnails/", 0777, true);
                 }
-                $thumbnailImage->resize(300, null, function($constraint){
+                $thumbnailImage->resize(null, 250, function($constraint){
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
                 $thumbnailImage->save($thumbDestination."/".$newFileName, 100);
 
+                $mediumImage = $manager->make($fileTmp);
+                $mediumDestination = "../images/uploads/medium";
+                if(! is_dir($mediumDestination)){
+                    mkdir("../images/uploads/medium/", 0777, true);
+                }
+                $mediumImage->resize(300, null, function($constraint){
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $mediumImage->save($mediumDestination."/".$newFileName, 100);
 
-                header("Location: ./books/book.php?id=$lastID");
+                header("Location: book.php?id=$lastID");
+
             } else {
                 die("Something went wrong, can't add the entry into the database");
             }
 
-
         }
     }
-
 
  ?>
  <div class="container">

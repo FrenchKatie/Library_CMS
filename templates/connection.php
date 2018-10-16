@@ -1,18 +1,13 @@
 <?php
-    //database connection.
-    //needs four values:
-        // 1.host
-        // 2.username
-        // 3.password
-        // 4.table
-    //these are being pulled from the .env file
-    $dbc = mysqli_connect(getenv("DB_HOST"), getenv("DB_USER"), getenv("DB_PASS"), getenv("DB_TABLE"));
+    date_default_timezone_set("Pacific/Auckland");
+    // $dbc = mysqli_connect(host, username, password, table);
+    $dbc = mysqli_connect(getenv('DB_HOST'), getenv('DB_USER'), getenv('DB_PASS'), getenv('DB_TABLE'));
     if($dbc){
-        // var_dump("Connection succesful");
-        $dbc->set_charset("utf8");
+        // var_dump('connection successfull');
+        $dbc->set_charset('utf8');
+        mysqli_query($dbc, "SET time_zone = 'Asia/Colombo'");
     } else {
-        die("ERROR! Connection failed. Please check your enviroment files and include the correct host, username, password and table.");
+        die("ERROR, connection couldn't be made, Please check your enviroment files and include the right host, username, password and table.");
     }
-
 
  ?>
