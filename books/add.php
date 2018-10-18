@@ -141,10 +141,13 @@
 
                  <div class="form-group">
                    <label for="author">Author</label>
-                   <input type="text" class="form-control"  name="author" placeholder="Enter books author" value="<?php if(isset($_POST['author'])){ echo $_POST['author']; } ?>">
+                   <input type="text" class="form-control" autocomplete="off"  name="author" placeholder="Enter books author" value="<?php if(isset($_POST['author'])){ echo $_POST['author']; } ?>">
+                   <div id="autocomplete-authors">
+                       
+                   </div>
                  </div>
 
-                 <div class="form-group">
+                 <div class="form-group author-group">
                    <label for="description">Book Description</label>
                    <textarea class="form-control" name="description" rows="8" cols="80" placeholder="Description about the book"><?php if(isset($_POST['description'])){ echo $_POST['description']; } ?></textarea>
                  </div>
